@@ -1,0 +1,4 @@
+$(document).ready(function() {
+	document.getElementById("terminal").contentWindow.location.href = "http://192.168.1.101:6080/vnc.html";
+	alert("您已成功连接：192.168.1.101");
+});

@@ -1,0 +1,16 @@
+function selectIP(ip) {
+	var selectNode = document.getElementById(ip);//获取点击的节点
+	var selectIP = selectNode.innerHTML;//获取要转向的vnc的IP
+	var activeLink = document.getElementsByClassName("active");//获取class为active的对象
+	//将原有的active特效清除
+	for (var i = 0;i < activeLink.length ;i++) {
+		var link = activeLink[i];
+		if (link.id.indexOf("ip-") != -1) {
+			link.className = "";
+		}
+	}
+	selectNode.className = "active";
+	document.getElementById("terminal").contentWindow.location.href = "file:///C:/Users/ASUS/Desktop/%E9%AB%98%E4%BB%BF%E5%AE%9E%E9%AA%8C%E6%A5%BCIT%E5%9C%A8%E7%BA%BF%E6%95%99%E8%82%B2%E5%B9%B3%E5%8F%B0%E7%BD%91%E7%AB%99%E5%93%8D%E5%BA%94%E5%BC%8F%E6%95%B4%E7%AB%99%E6%A8%A1%E6%9D%BF%E6%BA%90%E7%A0%81/%E9%AB%98%E4%BB%BF%E5%AE%9E%E9%AA%8C%E6%A5%BCIT%E5%9C%A8%E7%BA%BF%E6%95%99%E8%82%B2%E5%B9%B3%E5%8F%B0%E7%BD%91%E7%AB%99%E5%93%8D%E5%BA%94%E5%BC%8F%E6%95%B4%E7%AB%99%E6%A8%A1%E6%9D%BF%E6%BA%90%E7%A0%81/experiment/loading_request.html?ip=" + selectIP;//跳转到等待页面
+	document.getElementById("terminal").contentWindow.location.href = "http://" + selectIP + ":6080/vnc.html";//跳转到相应终端
+	alert("您已经连接上：" + selectIP);
+}

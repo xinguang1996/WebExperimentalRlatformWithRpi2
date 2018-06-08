@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta http-equiv="Cache-Control" content="o-transform">
+		<meta http-equiv="Cache-Control" content="no-siteapp">
+		<meta content="郭欣光" name="author">
+		<link rel="shortcut icon" href="favicon.ico">
+		<link rel="stylesheet" href="../static/font-awesome//4.7.0/css/font-awesome.min.css">
+		<link rel="stylesheet" href="../app/css/libs/bootstrap/3.3.7/css/bootstrap.min.css">
+		<style>
+			#lodaingText {
+				height: 100%;
+				width: 100%
+			}
+
+			.textCenter {
+				text-align:center;/*将文字水平居中*/
+				line-height:0px
+			}
+		</style>
+	</head>
+	<body>
+		<div id="loadingText" class="bg-info">
+			<h2 class="textCenter text-info" id="loadingInfo">正在加载，请稍后...</h2>
+		</div>
+		<script src="../static/jquery/2.2.4/jquery.min.js"></script>
+		<script>
+			$(document).ready(function() {
+				//alert(0.5 * window.screen.availHeight);
+				document.getElementById("loadingInfo").style.setProperty('line-height', 0.5 * window.screen.availHeight + "px");//将文字垂直居中
+//				if(window.location.href.indexOf("?") != -1) {
+//					var ip = window.location.href.split("?")[1].split("=")[1];
+//					document.getElementById("loadingInfo").innerHTML = "正在连接" + ip + "，请稍后...";
+//				} else {
+//					document.getElementById("loadingInfo").innerHTML = "正在启动并初始化终端，请稍后...";
+//				}
+			});
+		</script>
+	</body>
+</html>
