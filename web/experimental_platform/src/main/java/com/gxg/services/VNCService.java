@@ -1,6 +1,8 @@
 package com.gxg.services;
 
 import com.gxg.dao.ExperimentalNodeDao;
+import com.gxg.dao.NodeCountDao;
+import com.gxg.dao.NodeGroupDao;
 import com.gxg.entities.ExperimentalNode;
 import com.gxg.entities.User;
 import org.json.JSONObject;
@@ -35,6 +37,12 @@ public class VNCService {
 
     @Autowired
     private PingService pingService;
+
+    @Autowired
+    private NodeCountDao nodeCountDao;
+
+    @Autowired
+    private NodeGroupDao nodeGroupDao;
 
     /**
      * 发送启动vnc的socket信号
@@ -377,21 +385,47 @@ public class VNCService {
         }
     }
 
-    public String getNodeExist(HttpServletRequest request) {
+    public synchronized String getNodeExist(HttpServletRequest request) {
         String ip = ipService.getIpAddr(request);
         if (ip == null || "".equals(ip)) {
             System.out.println("A IP address that can not be identified");
             return "A IP address that can not be identified";
         } else {
             if (experimentalNodeDao.getNodeCountByIp(ip) == 0) {
-                try {
-                    experimentalNodeDao.insertByIp(ip);
-                    System.out.println("record ok" + ip);
-                    return "record ok";
-                } catch (Exception e) {
-                    System.out.println(e.getMessage());
-                    return "Record database error";
+//                    experimentalNodeDao.insertByIp(ip);
+                if (nodeCountDao.getCount() == 0) {
+                    try {
+                        nodeCountDao.addNodeCount(1, 1);
+                    } catch (Exception e) {
+                        System.out.println(e);
+                        return "Database error";
+                    }
                 }
+                int nodeCountEachGroup = nodeCountDao.getNodeCount();
+                int groupNumber = 1;
+                while (true) {
+                    if (experimentalNodeDao.getCountByGroupNumber(groupNumber) < nodeCountEachGroup) {
+                        if (nodeGroupDao.getCountByGroupNumber(groupNumber) == 0) {
+                            try {
+                                nodeGroupDao.insertByGroupNumber(groupNumber);
+                            } catch (Exception e) {
+                                System.out.println(e);
+                                return "Database error";
+                            }
+                        }
+                        try {
+                            experimentalNodeDao.insertByIpAndGroupNumber(ip, groupNumber);
+                        } catch (Exception e) {
+                            System.out.println(e);
+                            return "Database error";
+                        }
+                        break;
+                    } else {
+                        groupNumber++;
+                    }
+                }
+                System.out.println("record ok" + ip);
+                return "record ok";
             } else {
                 System.out.println("ok:" + ip);
                 return "ok";

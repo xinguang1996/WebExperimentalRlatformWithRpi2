@@ -302,4 +302,16 @@ public class ExperimentalNodeDao {
         });
         return experimentalNodeList;
     }
+
+
+    public int getCountByGroupNumber(int groupNumber) {
+        String sql = "select count(*) from ExperimentalNode where groupNumber=?";
+        int rowCount = jdbcTemplate.queryForObject(sql, Integer.class, groupNumber);
+        return rowCount;
+    }
+
+    public void insertByIpAndGroupNumber(String ip, int groupNumber) {
+        String sql = "insert into ExperimentalNode values(?, null, null, '正常', ?)";
+        jdbcTemplate.update(sql, ip, groupNumber);
+    }
 }
