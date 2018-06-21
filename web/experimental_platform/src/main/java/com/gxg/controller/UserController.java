@@ -76,12 +76,14 @@ public class UserController {
         if(session.getAttribute("user") == null) {
             return "没有用户！";
         } else {
-            User user = (User)session.getAttribute("user");
-            String result = vncService.closeUserVNC(user.getId());
-            if(result.equals("ok")) {
-                session.setAttribute("user", null);
-            }
-            return result;
+//            User user = (User)session.getAttribute("user");
+//            String result = vncService.closeUserVNC(user.getId());
+//            if(result.equals("ok")) {
+//                session.setAttribute("user", null);
+//            }
+//            return result;
+            session.setAttribute("user", null);
+            return "ok";
         }
 //        session.setAttribute("user", null);
 //        return "ok";

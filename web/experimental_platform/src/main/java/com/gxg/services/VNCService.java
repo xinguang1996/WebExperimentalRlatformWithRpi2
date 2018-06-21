@@ -344,6 +344,12 @@ public class VNCService {
                             System.out.println("No vnc node in group number " + nodeGroup.getGroupNumber());
                         }
                     }
+                    try {
+                        nodeGroupDao.setUserIpAndTimeNullByGroupNumber(nodeGroup.getGroupNumber());
+                    } catch (Exception e) {
+                        System.out.println(e);
+                        System.out.println("Group number " + nodeGroup.getGroupNumber() + " is failure to set null");
+                    }
                     System.out.println("Group number " + nodeGroup.getGroupNumber() + " check end");
                 }
             }
@@ -453,6 +459,12 @@ public class VNCService {
                 } else {
                     List<NodeGroup> nodeGroupList = nodeGroupDao.getNodeGroupByUserIpIsNull();
                     nodeGroup = nodeGroupList.get(0);
+                    try {
+                        nodeGroupDao.setUserIpByGroupNumber(clientIp, nodeGroup.getGroupNumber());
+                    } catch (Exception e) {
+                        System.out.println(e);
+                        return "暂无实验节点！";
+                    }
                 }
             } else {
                 nodeGroup = nodeGroupDao.getNodeGroupByUserIp(clientIp);

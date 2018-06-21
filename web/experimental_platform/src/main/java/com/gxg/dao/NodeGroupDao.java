@@ -110,4 +110,9 @@ public class NodeGroupDao {
         });
         return nodeGroupList;
     }
+
+    public void setUserIpByGroupNumber(String userIp, int groupNumber) {
+        String sql = "update NodeGroup set userIp=? where groupNumber=?";
+        jdbcTemplate.update(sql, userIp, groupNumber);
+    }
 }
