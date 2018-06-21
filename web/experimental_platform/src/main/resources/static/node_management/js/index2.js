@@ -99,7 +99,7 @@ function getNodeInformationSuccess(data) {
                 str += "<td class=\"danger\" align=\"center\"><b><input type=\"checkbox\" class=\"node-check-box\" id=\"node-ip-" + experimentalNode.ip + "\" value=\"" + experimentalNode.ip + "\"></td>";
             }
             str += "<td class=\"active\" align=\"center\">" + experimentalNode.ip + "</td>";
-            str += "<td class=\"warning\" align=\"center\">1</td>";
+            str += "<td class=\"warning\" align=\"center\">" + experimentalNode.groupNumber + "</td>";
             if (experimentalNode.datetime == undefined || experimentalNode.datetime == null) {
                 str += "<td class=\"success\" align=\"center\">无</td>";
             } else {

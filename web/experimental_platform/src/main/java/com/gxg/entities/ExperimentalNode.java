@@ -17,6 +17,7 @@ public class ExperimentalNode {
     private String userId;//用户id
     private Timestamp datetime;//用户使用的时间
     private String status;
+    private int groupNumber;
 
     public String getIp() {
         return ip;
@@ -50,6 +51,14 @@ public class ExperimentalNode {
         this.status = status;
     }
 
+    public int getGroupNumber() {
+        return groupNumber;
+    }
+
+    public void setGroupNumber(int groupNumber) {
+        this.groupNumber = groupNumber;
+    }
+
     @Override
     public String toString() {
         JSONObject jsonObject = new JSONObject();
@@ -57,6 +66,7 @@ public class ExperimentalNode {
         jsonObject.accumulate("userId", this.userId);
         jsonObject.accumulate("datetime", this.datetime);
         jsonObject.accumulate("status", this.status);
+        jsonObject.accumulate("groupNumber", this.groupNumber);
         return jsonObject.toString();
     }
 }

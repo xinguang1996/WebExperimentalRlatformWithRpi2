@@ -116,6 +116,7 @@ public class ExperimentalNodeDao {
                     experimentalNode.setUserId(resultSet.getString("userId"));
                     experimentalNode.setDatetime(resultSet.getTimestamp("time"));
                     experimentalNode.setStatus(resultSet.getString("status"));
+                    experimentalNode.setGroupNumber(resultSet.getInt("groupNumber"));
                     return experimentalNode;
                 }
             }, userId);
@@ -162,6 +163,7 @@ public class ExperimentalNodeDao {
                     experimentalNode.setUserId(resultSet.getString("userId"));
                     experimentalNode.setDatetime(resultSet.getTimestamp("time"));
                     experimentalNode.setStatus(resultSet.getString("status"));
+                    experimentalNode.setGroupNumber(resultSet.getInt("groupNumber"));
                     return experimentalNode;
                 }
             });
@@ -202,6 +204,7 @@ public class ExperimentalNodeDao {
                 experimentalNode.setUserId(resultSet.getString("userId"));
                 experimentalNode.setDatetime(resultSet.getTimestamp("time"));
                 experimentalNode.setStatus(resultSet.getString("status"));
+                experimentalNode.setGroupNumber(resultSet.getInt("groupNumber"));
                 return experimentalNode;
             }
         }, ip);
@@ -233,6 +236,7 @@ public class ExperimentalNodeDao {
                     experimentalNode.setUserId(resultSet.getString("userId"));
                     experimentalNode.setDatetime(resultSet.getTimestamp("time"));
                     experimentalNode.setStatus(resultSet.getString("status"));
+                    experimentalNode.setGroupNumber(resultSet.getInt("groupNumber"));
                     return experimentalNode;
                 }
             });
@@ -264,6 +268,7 @@ public class ExperimentalNodeDao {
                     experimentalNode.setUserId(resultSet.getString("userId"));
                     experimentalNode.setDatetime(resultSet.getTimestamp("time"));
                     experimentalNode.setStatus(resultSet.getString("status"));
+                    experimentalNode.setGroupNumber(resultSet.getInt("groupNumber"));
                     return experimentalNode;
                 }
             }, userId);
@@ -297,6 +302,7 @@ public class ExperimentalNodeDao {
                 experimentalNode.setUserId(resultSet.getString("userId"));
                 experimentalNode.setDatetime(resultSet.getTimestamp("time"));
                 experimentalNode.setStatus(resultSet.getString("status"));
+                experimentalNode.setGroupNumber(resultSet.getInt("groupNumber"));
                 return experimentalNode;
             }
         });
@@ -313,5 +319,44 @@ public class ExperimentalNodeDao {
     public void insertByIpAndGroupNumber(String ip, int groupNumber) {
         String sql = "insert into ExperimentalNode values(?, null, null, '正常', ?)";
         jdbcTemplate.update(sql, ip, groupNumber);
+    }
+    public List<ExperimentalNode> getExperimentalNodeByGroupNumberAndStatusOrderByIp(int groupNumber, String status) {
+        String sql = "select * from ExperimentalNode where groupNumber=? and status=?";
+        List<ExperimentalNode> experimentalNodeList = jdbcTemplate.query(sql, new RowMapper<ExperimentalNode>() {
+            @Override
+            public ExperimentalNode mapRow(ResultSet resultSet, int i) throws SQLException {
+                ExperimentalNode experimentalNode = new ExperimentalNode();
+                experimentalNode.setIp(resultSet.getString("ip"));
+                experimentalNode.setUserId(resultSet.getString("userId"));
+                experimentalNode.setDatetime(resultSet.getTimestamp("time"));
+                experimentalNode.setStatus(resultSet.getString("status"));
+                experimentalNode.setGroupNumber(resultSet.getInt("groupNumber"));
+                return experimentalNode;
+            }
+        }, groupNumber, status);
+        return experimentalNodeList;
+    }
+
+    public int getCountByGroupNumberAndStatus(int groupNumber, String status) {
+        String sql = "select count(*) from ExperimentalNode where groupNumber=? and status=?";
+        int rowCount = jdbcTemplate.queryForObject(sql, Integer.class, groupNumber, status);
+        return rowCount;
+    }
+
+    public List<ExperimentalNode> getExperimentalNodeByGroupNumber(int groupNumber) {
+        String sql = "select * from ExperimentalNode where groupNumber=?";
+        List<ExperimentalNode> experimentalNodeList = jdbcTemplate.query(sql, new RowMapper<ExperimentalNode>() {
+            @Override
+            public ExperimentalNode mapRow(ResultSet resultSet, int i) throws SQLException {
+                ExperimentalNode experimentalNode = new ExperimentalNode();
+                experimentalNode.setIp(resultSet.getString("ip"));
+                experimentalNode.setUserId(resultSet.getString("userId"));
+                experimentalNode.setDatetime(resultSet.getTimestamp("time"));
+                experimentalNode.setStatus(resultSet.getString("status"));
+                experimentalNode.setGroupNumber(resultSet.getInt("groupNumber"));
+                return experimentalNode;
+            }
+        }, groupNumber);
+        return experimentalNodeList;
     }
 }
