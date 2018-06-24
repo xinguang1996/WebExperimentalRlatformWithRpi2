@@ -6,14 +6,13 @@ import com.gxg.dao.NodeGroupDao;
 import com.gxg.entities.ExperimentalNode;
 import com.gxg.entities.NodeGroup;
 import com.gxg.entities.User;
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.xml.soap.Node;
+import javax.servlet.http.HttpSession;
 import java.io.*;
 import java.net.Socket;
 import java.sql.Timestamp;
@@ -460,7 +459,9 @@ public class VNCService {
                     List<NodeGroup> nodeGroupList = nodeGroupDao.getNodeGroupByUserIpIsNull();
                     nodeGroup = nodeGroupList.get(0);
                     try {
-                        nodeGroupDao.setUserIpByGroupNumber(clientIp, nodeGroup.getGroupNumber());
+                        Timestamp time = new Timestamp(System.currentTimeMillis());//获取当前系统时间
+                        nodeGroupDao.setUserIpAndTimeByGroupNumber(clientIp, time, nodeGroup.getGroupNumber());
+//                        nodeGroupDao.setUserIpByGroupNumber(clientIp, nodeGroup.getGroupNumber());
                     } catch (Exception e) {
                         System.out.println(e);
                         return "暂无实验节点！";
@@ -592,5 +593,96 @@ public class VNCService {
             System.out.println("No node can be checked");
         }
         System.out.println("Check node exist end");
+    }
+
+    public String getNodeNumberEachGroup() {
+        if (nodeCountDao.getCount() == 0) {
+            return "0";
+        } else {
+            return nodeCountDao.getNodeCount() + "";
+        }
+    }
+
+    public String changeNodeGroup(String groupCount, HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        if (session.getAttribute("user") == null) {
+            return "用户未登录！";
+        } else {
+            User user = (User)session.getAttribute("user");
+            if ("教师".equals(user.getRole())) {
+                int groupCountInt = 1;
+                try {
+                    groupCountInt = Integer.parseInt(groupCount);
+                } catch (Exception e) {
+                    System.out.println(e);
+                    return "传入的每组节点个数必须是一个整数！";
+                }
+                if (experimentalNodeDao.getNodeCount() == 0) {
+                    return "暂无节点，无法分组！";
+                } else {
+                    try {
+                        if (nodeCountDao.getCount() == 0) {
+                            nodeCountDao.addNodeCount(1, groupCountInt);
+                        } else {
+                            nodeCountDao.updateNodeCount(groupCountInt);
+                        }
+                    } catch (Exception e) {
+                        System.out.println(e);
+                        return "操作数据库失败！";
+                    }
+                    List<ExperimentalNode> experimentalNodeList = experimentalNodeDao.getAllNodeOrderByIp();
+                    for (ExperimentalNode experimentalNode : experimentalNodeList) {
+                        if (experimentalNode.getUserId() != null && "正常".equals(experimentalNode.getStatus())) {
+                            System.out.println("关闭节点：" + experimentalNode.getIp() + "结果：" + this.stopVNC(experimentalNode.getIp()));
+                            try {
+                                experimentalNodeDao.setUserIdAndTimeNullByIp(experimentalNode.getIp());
+                            } catch (Exception e) {
+                                System.out.println(e);
+                                System.out.println("更新节点：" + experimentalNode.getIp() + "操作数据库失败！");
+                            }
+                        }
+                    }
+                    try {
+                        experimentalNodeDao.setAllGroupNumberNull();
+                    } catch (Exception e) {
+                        System.out.println(e);
+                        return "分组时数据库出现错误！每组节点数已经存入数据库！";
+                    }
+                    try {
+                        nodeGroupDao.deleteAll();
+                    } catch (Exception e) {
+                        System.out.println(e);
+                        return "分组时数据库出现错误！每组节点数已经存入数据库！";
+                    }
+                    for (ExperimentalNode experimentalNode : experimentalNodeList) {
+                        int groupNumber = 1;
+                        while (true) {
+                            if (nodeGroupDao.getCountByGroupNumber(groupNumber) == 0) {
+                                try {
+                                    nodeGroupDao.insertByGroupNumber(groupNumber);
+                                } catch (Exception e) {
+                                    System.out.println(e);
+                                    return "分组时数据库出现错误！每组节点数已经存入数据库！";
+                                }
+                            }
+                            if (experimentalNodeDao.getCountByGroupNumber(groupNumber) < groupCountInt) {
+                                try {
+                                    experimentalNodeDao.setGroupNumberByIp(groupNumber, experimentalNode.getIp());
+                                } catch (Exception e) {
+                                    System.out.println(e);
+                                    return "分组时数据库出现错误！每组节点数已经存入数据库！";
+                                }
+                                break;
+                            } else {
+                                groupNumber++;
+                            }
+                        }
+                    }
+                    return "ok";
+                }
+            } else {
+                return "抱歉，仅有教师可以设置分组！";
+            }
+        }
     }
 }

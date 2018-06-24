@@ -359,4 +359,14 @@ public class ExperimentalNodeDao {
         }, groupNumber);
         return experimentalNodeList;
     }
+
+    public void setAllGroupNumberNull() {
+        String sql = "update ExperimentalNode set groupNumber=null";
+        jdbcTemplate.update(sql);
+    }
+
+    public void setGroupNumberByIp(int groupNumber, String ip) {
+        String sql = "update ExperimentalNode set groupNumber=? where ip=?";
+        jdbcTemplate.update(sql, groupNumber, ip);
+    }
 }

@@ -129,4 +129,16 @@ public class VNCController {
     public String getNodeExist(HttpServletRequest request) {
         return vncService.getNodeExist(request);
     }
+
+    @PostMapping(value = "/get_node_number_each_group")
+    @ResponseBody
+    public String getNodeNumberEachGroup() {
+        return vncService.getNodeNumberEachGroup();
+    }
+
+    @PostMapping(value = "/change_node_group")
+    @ResponseBody
+    public String changeNodeGroup(@RequestParam("groupCount") String groupCount, HttpServletRequest request) {
+        return vncService.changeNodeGroup(groupCount, request);
+    }
 }

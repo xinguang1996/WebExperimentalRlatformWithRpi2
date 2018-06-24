@@ -30,4 +30,9 @@ public class NodeCountDao {
         int count = jdbcTemplate.queryForObject(sql, Integer.class);
         return count;
     }
+
+    public void updateNodeCount(int nodeCount) {
+        String sql = "update NodeCount set count=? where id=1";
+        jdbcTemplate.update(sql, nodeCount);
+    }
 }

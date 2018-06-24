@@ -9,6 +9,7 @@ import org.w3c.dom.NodeList;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.List;
 
@@ -114,5 +115,10 @@ public class NodeGroupDao {
     public void setUserIpByGroupNumber(String userIp, int groupNumber) {
         String sql = "update NodeGroup set userIp=? where groupNumber=?";
         jdbcTemplate.update(sql, userIp, groupNumber);
+    }
+
+    public void setUserIpAndTimeByGroupNumber(String userIp, Timestamp time, int groupNumber) {
+        String sql = "update NodeGroup set userIp=?, time=? where groupNumber=?";
+        jdbcTemplate.update(sql, userIp, time, groupNumber);
     }
 }

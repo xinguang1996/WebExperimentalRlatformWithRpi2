@@ -2,6 +2,8 @@
  * Created by 郭欣光 on 2018/4/7.
  */
 
+
+var isGetNodeNumberEachGroup = true;
 function getNodeInformation() {
     $.ajax({
         url: "/get_all_experimental_node",
@@ -56,6 +58,12 @@ function getNodeInformationSuccess(data) {
                 }
             }
         }
+        var nodeNumberEachGroup = "";
+        try {
+            nodeNumberEachGroup = $("#node-number-each-group").val();
+        } catch (err) {
+            console.log(err);
+        }
         var obj = JSON.parse(data);
         var experimentalNodeList = obj['experimentalNodeList'];
         var str = "";
@@ -70,7 +78,7 @@ function getNodeInformationSuccess(data) {
         str += '<div class="col-sm-3"></div>';
         str += '<label for="node-number-each-group" class="col-sm-4 control-label">每组节点个数：</label>';
         str += '<div class="col-sm-2"><input type="text" class="form-control" id="node-number-each-group"></div>';
-        str += '<div class="col-sm-2"><button type="button" class="btn btn-success">确认</button></div>';
+        str += '<div class="col-sm-2"><button type="button" class="btn btn-success" onclick="changeNodeGroup();">确认</button></div>';
         str += '</div>';
         str += '</form>';
         str += '</div>';
@@ -133,6 +141,10 @@ function getNodeInformationSuccess(data) {
         document.getElementById("nodeInformation").innerHTML = str;
         if (nodeNumberEachGroupInputIsFocus) {
             $("#node-number-each-group").focus();
+        }
+        $("#node-number-each-group").val(nodeNumberEachGroup);
+        if (isGetNodeNumberEachGroup) {
+            getNodeNumberEachGroup();
         }
     }
 }
@@ -304,6 +316,94 @@ function downloadEnvironment(experimentalNodeIp) {
 function clearEnvironment(experimentalNodeIp) {
     $("#delete-environment-node-ip").val(experimentalNodeIp);
     $("#deleteEnvironmentModelHref").click();
+}
+
+function getNodeNumberEachGroup() {
+    $.ajax({
+        url: "/get_node_number_each_group",
+        type: "POST",
+        cache: false,//设置不缓存
+        success: getNodeNumberEachGroupSuccess,
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+            if (XMLHttpRequest.status >= 400 && XMLHttpRequest.status < 500) {
+                alert("客户端请求出错！错误代码（" + XMLHttpRequest.status + "," + XMLHttpRequest.readyState + "," + textStatus + "）");
+            } else {
+                if (XMLHttpRequest.status >= 500 || XMLHttpRequest.status <= 600) {
+                    alert("服务器出错！错误代码（" + XMLHttpRequest.status + "," + XMLHttpRequest.readyState + "," + textStatus + "）");
+                } else {
+                    if (XMLHttpRequest.status >= 300 || XMLHttpRequest.status < 400) {
+                        alert("重定向问题！错误代码（" + XMLHttpRequest.status + "," + XMLHttpRequest.readyState + "," + textStatus + "）");
+                    } else {
+                        alert("抱歉，系统好像出现一些异常！错误代码（" + XMLHttpRequest.status + "," + XMLHttpRequest.readyState + "," + textStatus + "）");
+                    }
+                }
+            }
+        }
+    });
+}
+
+function getNodeNumberEachGroupSuccess(data) {
+    try {
+        $("#node-number-each-group").val(data.trim());
+        isGetNodeNumberEachGroup = false;
+    } catch (err) {
+        console.log(err);
+    }
+}
+
+function isInteger(obj) {
+    return obj%1 === 0
+}
+
+function changeNodeGroup() {
+    if (confirm("您确定要重新设置分组吗？如果有实验节点正在使用，则会进行强制关闭，关闭节点的时间可能较长，请耐心等待！")) {
+        var groupCount = $("#node-number-each-group").val();
+        if (groupCount == "" || groupCount == null) {
+            alert("每组节点数不能为空！");
+        } else {
+            if (isInteger(groupCount)) {
+                var obj = new Object();
+                obj.groupCount = groupCount;
+                    $.ajax({
+                        url: "/change_node_group",
+                        type: "POST",
+                        cache: false,//设置不缓存
+                        data: obj,
+                        success: changeNodeGroupSuccess,
+                        error: function (XMLHttpRequest, textStatus, errorThrown) {
+                            if (XMLHttpRequest.status >= 400 && XMLHttpRequest.status < 500) {
+                                alert("客户端请求出错！错误代码（" + XMLHttpRequest.status + "," + XMLHttpRequest.readyState + "," + textStatus + "）");
+                            } else {
+                                if (XMLHttpRequest.status >= 500 || XMLHttpRequest.status <= 600) {
+                                    alert("服务器出错！错误代码（" + XMLHttpRequest.status + "," + XMLHttpRequest.readyState + "," + textStatus + "）");
+                                } else {
+                                    if (XMLHttpRequest.status >= 300 || XMLHttpRequest.status < 400) {
+                                        alert("重定向问题！错误代码（" + XMLHttpRequest.status + "," + XMLHttpRequest.readyState + "," + textStatus + "）");
+                                    } else {
+                                        alert("抱歉，系统好像出现一些异常！错误代码（" + XMLHttpRequest.status + "," + XMLHttpRequest.readyState + "," + textStatus + "）");
+                                    }
+                                }
+                            }
+                        }
+                    });
+            } else {
+                alert("每组节点数必须是整数！");
+            }
+        }
+    }
+}
+
+function changeNodeGroupSuccess(data) {
+    if (data.indexOf("ok") == 0) {
+        alert("设置成功！");
+        window.location.reload();
+    } else {
+        if (data.indexOf("用户未登录！") == 0 || data.indexOf("抱歉，仅有教师可以设置分组！") == 0) {
+            window.location.href = "/index.html";
+        } else {
+            alert(data);
+        }
+    }
 }
 
 $(document).ready(function () {
