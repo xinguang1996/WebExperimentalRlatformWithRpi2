@@ -775,7 +775,7 @@
         </div>
     </div>
     <div class="text-center copyright">
-        <span>Copyright &copy;2017-2018 长春工业大学4831实验室</span>
+        <span>Copyright &copy;2017-2018 实验科技</span>
         <!--<span class="ver-line"> | </span>-->
         <!--<a href="http://www.miibeian.gov.cn/" target="_blank">蜀ICP备13019762号</a>-->
         <!--<script type="text/javascript">-->
@@ -814,36 +814,36 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="batchDownloadModelClose"><span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title">批量下载</h4>
             </div>
-            <div class="modal-body">
-                <table class="table table-bordered">
-                    <tr>
-                        <td>选择</td>
-                        <td>镜像名</td>
-                        <td>下载次数</td>
-                    </tr>
-                    <tr>
-                        <td><input type="checkbox"></td>
-                        <td>Python</td>
-                        <td>20</td>
-                    </tr>
-                    <tr>
-                        <td><input type="checkbox"></td>
-                        <td>C++</td>
-                        <td>5</td>
-                    </tr>
-                    <tr>
-                        <td><input type="checkbox"></td>
-                        <td>Java</td>
-                        <td>30</td>
-                    </tr>
-                </table>
+            <div class="modal-body" id="batchDownloadImageList">
+                <!--<table class="table table-bordered">-->
+                    <!--<tr>-->
+                        <!--<td>选择</td>-->
+                        <!--<td>镜像名</td>-->
+                        <!--<td>下载次数</td>-->
+                    <!--</tr>-->
+                    <!--<tr>-->
+                        <!--<td><input type="checkbox"></td>-->
+                        <!--<td>Python</td>-->
+                        <!--<td>20</td>-->
+                    <!--</tr>-->
+                    <!--<tr>-->
+                        <!--<td><input type="checkbox"></td>-->
+                        <!--<td>C++</td>-->
+                        <!--<td>5</td>-->
+                    <!--</tr>-->
+                    <!--<tr>-->
+                        <!--<td><input type="checkbox"></td>-->
+                        <!--<td>Java</td>-->
+                        <!--<td>30</td>-->
+                    <!--</tr>-->
+                <!--</table>-->
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                <button type="button" class="btn btn-primary">下载</button>
+                <button type="button" class="btn btn-primary" onclick="batchDownloadImage()">下载</button>
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
@@ -855,37 +855,37 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="downloadEnvironmentModelClose"><span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title">下载环境</h4>
             </div>
-            <input type="hidden" id="download-environment-node-ip">
-            <div class="modal-body">
-                <table class="table table-bordered">
-                    <tr>
-                        <td>选择</td>
-                        <td>镜像名</td>
-                        <td>下载次数</td>
-                    </tr>
-                    <tr>
-                        <td><input type="checkbox"></td>
-                        <td>Python</td>
-                        <td>20</td>
-                    </tr>
-                    <tr>
-                        <td><input type="checkbox"></td>
-                        <td>C++</td>
-                        <td>5</td>
-                    </tr>
-                    <tr>
-                        <td><input type="checkbox"></td>
-                        <td>Java</td>
-                        <td>30</td>
-                    </tr>
-                </table>
+            <!--<input type="hidden" id="download-environment-node-ip">-->
+            <div class="modal-body" id="downloadEnvironmentImageList">
+                <!--<table class="table table-bordered">-->
+                    <!--<tr>-->
+                        <!--<td>选择</td>-->
+                        <!--<td>镜像名</td>-->
+                        <!--<td>下载次数</td>-->
+                    <!--</tr>-->
+                    <!--<tr>-->
+                        <!--<td><input type="checkbox"></td>-->
+                        <!--<td>Python</td>-->
+                        <!--<td>20</td>-->
+                    <!--</tr>-->
+                    <!--<tr>-->
+                        <!--<td><input type="checkbox"></td>-->
+                        <!--<td>C++</td>-->
+                        <!--<td>5</td>-->
+                    <!--</tr>-->
+                    <!--<tr>-->
+                        <!--<td><input type="checkbox"></td>-->
+                        <!--<td>Java</td>-->
+                        <!--<td>30</td>-->
+                    <!--</tr>-->
+                <!--</table>-->
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                <button type="button" class="btn btn-primary">下载</button>
+                <button type="button" class="btn btn-primary" onclick="downloadEnvironmentImage()">下载</button>
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
@@ -896,45 +896,45 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="deleteEnvironmentModelClose"><span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title">清除环境</h4>
             </div>
-            <input type="hidden" id="delete-environment-node-ip">
-            <div class="modal-body">
-                <table class="table table-bordered">
-                    <tr>
-                        <td>选择</td>
-                        <td>镜像名</td>
-                        <td>镜像ID</td>
-                        <td>更新时间</td>
-                        <td>使用状态</td>
-                    </tr>
-                    <tr>
-                        <td><input type="checkbox"></td>
-                        <td>Python</td>
-                        <td>bhikhipjp</td>
-                        <td>2015/10/20</td>
-                        <td>使用中</td>
-                    </tr>
-                    <tr>
-                        <td><input type="checkbox"></td>
-                        <td>C++</td>
-                        <td>bhikhipjp</td>
-                        <td>2010/10/20</td>
-                        <td>未使用</td>
-                    </tr>
-                    <tr>
-                        <td><input type="checkbox"></td>
-                        <td>Java</td>
-                        <td>bhikhipjp</td>
-                        <td>2017/9/20</td>
-                        <td>使用中</td>
-                    </tr>
-                </table>
+            <!--<input type="hidden" id="delete-environment-node-ip">-->
+            <div class="modal-body" id="deleteEnvironmentImageList">
+                <!--<table class="table table-bordered">-->
+                    <!--<tr>-->
+                        <!--<td>选择</td>-->
+                        <!--<td>镜像名</td>-->
+                        <!--<td>镜像ID</td>-->
+                        <!--<td>更新时间</td>-->
+                        <!--<td>使用状态</td>-->
+                    <!--</tr>-->
+                    <!--<tr>-->
+                        <!--<td><input type="checkbox"></td>-->
+                        <!--<td>Python</td>-->
+                        <!--<td>bhikhipjp</td>-->
+                        <!--<td>2015/10/20</td>-->
+                        <!--<td>使用中</td>-->
+                    <!--</tr>-->
+                    <!--<tr>-->
+                        <!--<td><input type="checkbox"></td>-->
+                        <!--<td>C++</td>-->
+                        <!--<td>bhikhipjp</td>-->
+                        <!--<td>2010/10/20</td>-->
+                        <!--<td>未使用</td>-->
+                    <!--</tr>-->
+                    <!--<tr>-->
+                        <!--<td><input type="checkbox"></td>-->
+                        <!--<td>Java</td>-->
+                        <!--<td>bhikhipjp</td>-->
+                        <!--<td>2017/9/20</td>-->
+                        <!--<td>使用中</td>-->
+                    <!--</tr>-->
+                <!--</table>-->
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                <button type="button" class="btn btn-primary">清除</button>
+                <button type="button" class="btn btn-primary" onclick="clearEnvironmentImage()">清除</button>
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
@@ -958,6 +958,7 @@
 
 <script src="../app/dest/base/index.js?=2016121272249"></script>
 
+<script src="js/docker_information_url.js"></script>
 <script src="js/index.js"></script>
 <script src="js/index2.js"></script>
 </body>
